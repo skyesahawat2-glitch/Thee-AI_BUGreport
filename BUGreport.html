@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>Thee AI | Bug Reporting WebPage"</title>
+    <style>
+        :root {
+            /* Palette สีเพื่อความผ่อนคลาย */
+            --bg-color: #FDFCFB;     /* สีพื้นหลังครีมอ่อนๆ (Warm Off-white) */
+            --panel-color: #FFFFFF;  /* สีขาวสำหรับแผงข้อมูล */
+            --primary-color: #89A083; /* สีเขียวใบไม้แห้ง (Sage Green) - สีหลัก */
+            --accent-hover: #738A6F; /* สีเขียวที่เข้มขึ้นเล็กน้อยสำหรับ Hover */
+            --text-color: #495057;    /* สีเทาเข้มเนื้อนุ่ม (Soft Dark Gray) - ข้อความหลัก */
+            --secondary-text: #6C757D; /* สีเทาอ่อน - ข้อความรอง */
+            --border-color: #E9ECEF; /* สีขอบที่บางเบา */
+            --error-soft: #E07A5F;   /* สีส้มอิฐอ่อนๆ (Soft Coral) - สถานะ/Error */
+            --shadow: 0 10px 30px rgba(0,0,0,0.05); /* เงาที่นุ่มนวล ดูเบาสบาย */
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif; /* Font สะอาดตา อ่านง่าย */
+            line-height: 1.6;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.3s ease;
+        }
+
+        .box {
+            background-color: var(--panel-color);
+            width: 90%;
+            max-width: 650px;
+            padding: 40px; /* เพิ่มช่องว่างภายในให้รู้สึกโปร่ง */
+            border-radius: 20px; /* ขอบโค้งมน นุ่มนวล */
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color); /* ขอบบางเบามาก */
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        h1 {
+            font-weight: 500; /* ไม่หนาเกินไป */
+            color: var(--text-color);
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            letter-spacing: -0.5px;
+        }
+
+        p {
+            color: var(--secondary-text);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Form Fields - ดีไซน์นุ่มนวลและเป็นมิตร */
+        input, textarea {
+            width: 100%;
+            background-color: #F8F9FA;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 15px; /* เพิ่มพื้นที่สัมผัส */
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border-radius: 12px;
+            font-size: 1em;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(137, 160, 131, 0.2); /* เงาเรืองแสงนุ่มนวลตอน Focus */
+        }
+
+        /* Primary Button - สีเขียว Sage Green สุดผ่อนคลาย */
+        button.primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            border-radius: 12px;
+            font-size: 1em;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 4px 10px rgba(137, 160, 131, 0.2);
+        }
+
+        button.primary:hover {
+            background-color: var(--accent-hover);
+        }
+
+        button.primary:active {
+            transform: scale(0.98); /* Tactile feedback นุ่มนวล */
+        }
+
+        /* Tables - ดีไซน์สะอาดตาและโปร่ง */
+        table {
+            width: 100%;
+            border-collapse: separate; /* เพื่อให้ขอบโค้งทำงานได้เต็มที่ */
+            border-spacing: 0 8px; /* เพิ่มWhitespaceระหว่างแถว */
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        th {
+            font-weight: 600;
+            color: var(--secondary-text);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        tr.data-row {
+            background-color: var(--panel-color);
+            border: 1px solid var(--border-color);
+            transition: background-color 0.2s ease;
+        }
+
+        tr.data-row:hover {
+            background-color: #F8F9FA;
+        }
+
+        /* Rounded corners สำหรับเซลล์ในแถว */
+        tr.data-row td:first-child { border-radius: 12px 0 0 12px; }
+        tr.data-row td:last-child { border-radius: 0 12px 12px 0; }
+        tr.data-row td {
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+        tr.data-row td:first-child { border-left: 1px solid var(--border-color); }
+        tr.data-row td:last-child { border-right: 1px solid var(--border-color); }
+
+        .status-badge {
+            background-color: rgba(224, 122, 95, 0.1); /* สีส้มCORALอ่อนๆ */
+            color: var(--error-soft);
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+        }
+
+        .hidden { display: none; }
+
+        /* Navigation links - นุ่มนวลและไม่กวนสายตา */
+        .nav-link {
+            color: var(--secondary-text);
+            cursor: pointer;
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9em;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--text-color);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="reportPage" class="box">
+        <h1>[ REPORT A BUG ]</h1>
+        <p>ป้อนข้อมูลปัญหาที่คุณพบใน Thee AI ด้านล่างนี้:</p>
+        <input type="text" id="bugTitle" placeholder="หัวข้อปัญหา (เช่น AI ตอบเป็นภาษาต่างดาว)">
+        <textarea id="bugDesc" rows="5" placeholder="รายละเอียดเหตุการณ์ / คำสั่งที่รันก่อนเกิดบั๊ก..."></textarea>
+        <button onclick="saveBug()" class="primary">SEND BUG REPORT</button>
+        <span class="nav-link" onclick="showLogin()">Administrator Access</span>
+    </div>
+
+    <div id="loginPage" class="box hidden">
+        <h1>[ ADMIN LOGIN ]</h1>
+        <p>กรุณากรอกรหัสผ่านเพื่อเข้าดูฐานข้อมูล:</p>
+        <input type="password" id="adminPass" placeholder="ENTER ACCESS CODE">
+        <button onclick="checkAuth()" class="primary">AUTHORIZE</button>
+        <span class="nav-link" onclick="showPage('reportPage')">Back to Report</span>
+    </div>
+
+    <div id="adminPage" class="box hidden" style="max-width: 900px;">
+        <h1>[ BUG DATABASE ]</h1>
+        <table id="bugTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>TOPIC</th>
+                    <th>DESCRIPTION</th>
+                    <th>STATUS</th>
+                </tr>
+            </thead>
+            <tbody id="bugList"></tbody>
+        </table>
+        <button onclick="clearData()" style="background: var(--error-soft); margin-top: 20px;" class="primary">WIPE ALL DATA</button>
+        <span class="nav-link" onclick="showPage('reportPage')">Logout</span>
+    </div>
+
+    <script>
+        // ฟังก์ชันสลับหน้า
+        function showPage(pageId) {
+            document.querySelectorAll('.box').forEach(b => b.classList.add('hidden'));
+            document.getElementById(pageId).classList.remove('hidden');
+        }
+
+        function showLogin() { showPage('loginPage'); }
+
+        // บันทึกบั๊ก (ใช้ LocalStorage)
+        function saveBug() {
+            const title = document.getElementById('bugTitle').value;
+            const desc = document.getElementById('bugDesc').value;
+            if(!title || !desc) return alert("กรุณาระบุข้อมูลให้ครบถ้วน!");
+
+            const bugs = JSON.parse(localStorage.getItem('thee_ai_bugs')) || [];
+            bugs.push({ id: Date.now(), title, desc });
+            localStorage.setItem('thee_ai_bugs', JSON.stringify(bugs));
+
+            alert("ขอบคุณครับ! บันทึกข้อมูลเรียบร้อยแล้ว Thee AI จะตรวจสอบในเร็วๆ นี้");
+            document.getElementById('bugTitle').value = '';
+            document.getElementById('bugDesc').value = '';
+        }
+
+        // เช็ครหัสผ่าน (รหัสคือ: thee-admin)
+        function checkAuth() {
+            const pass = document.getElementById('adminPass').value;
+            if(pass === "thee-admin") {
+                renderAdmin();
+                showPage('adminPage');
+            } else {
+                alert("ACCESS DENIED: รหัสผ่านไม่ถูกต้อง");
+            }
+        }
+
+        // แสดงตารางบั๊ก
+        function renderAdmin() {
+            const list = document.getElementById('bugList');
+            const bugs = JSON.parse(localStorage.getItem('thee_ai_bugs')) || [];
+            list.innerHTML = bugs.map(b => `
+                <tr class="data-row">
+                    <td>#${b.id.toString().slice(-4)}</td>
+                    <td>${b.title}</td>
+                    <td>${b.desc}</td>
+                    <td><span class="status-badge">PENDING</span></td>
+                </tr>
+            `).join('') || '<tr class="data-row"><td colspan="4" style="text-align:center">--- No bugs found in system ---</td></tr>';
+        }
+
+        // ล้างข้อมูล
+        function clearData() {
+            if(confirm("ยืนยันการทำความสะอาดฐานข้อมูลทั้งหมด?")) {
+                localStorage.removeItem('thee_ai_bugs');
+                renderAdmin();
+            }
+        }
+    </script>
+</body>
+</html>
